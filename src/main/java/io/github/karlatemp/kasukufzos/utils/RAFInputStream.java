@@ -1,0 +1,33 @@
+package io.github.karlatemp.kasukufzos.utils;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.RandomAccessFile;
+
+public class RAFInputStream extends InputStream {
+    private final RandomAccessFile raf;
+
+    public RAFInputStream(RandomAccessFile raf) {
+        this.raf = raf;
+    }
+
+    @Override
+    public int read() throws IOException {
+        return raf.read();
+    }
+
+    @Override
+    public int read(byte[] b, int off, int len) throws IOException {
+        return raf.read(b, off, len);
+    }
+
+    @Override
+    public int read(byte[] b) throws IOException {
+        return raf.read(b);
+    }
+
+    @Override
+    public void close() throws IOException {
+        raf.close();
+    }
+}

@@ -1,0 +1,28 @@
+
+
+struct Image {
+    int32 module-count
+
+    repeat Module module
+}
+
+struct Module {
+    UTF8String module-name
+    int32 resource-counts
+    repeat ResourceInfo resourceInfo
+    int64 contentBlockSize
+    $[MARK - ContentPointer]
+    byte[] contentBlock
+}
+
+struct UTF8String {
+    int32 bytes
+    byte[] content
+}
+
+struct ResourceInfo {
+    UTF8String name
+    int64 startPointer // Relative to $[MARK - ContentPointer]
+    int64 endPointer   // Relative to $[MARK - ContentPointer]
+    int32 modifiers
+}

@@ -1,0 +1,16 @@
+build/
+/.idea
+.gradle
+/config
+/data
+/plugins
+*.bin
+*.image
+*.zip
+*.tar
+*.log
+
+/temp
+
+loctest/
+

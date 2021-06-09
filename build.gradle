@@ -1,0 +1,27 @@
+plugins {
+    id 'java'
+    id 'java-library'
+}
+
+group 'io.github.karlatemp'
+version '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    api 'org.bouncycastle:bcprov-jdk15on:1.68'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
