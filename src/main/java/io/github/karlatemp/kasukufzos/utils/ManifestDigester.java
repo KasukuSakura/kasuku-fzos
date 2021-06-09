@@ -1,26 +1,9 @@
 /*
- * Copyright (c) 1997, 2019, Oracle and/or its affiliates. All rights reserved.
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ * Copyright (c) 2018-2021 Karlatemp and contributors. All rights reserved.
  *
+ * Use of this source code is governed by the MIT license that can be found via the following link.
  *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
+ * https://github.com/KasukuSakura/kasuku-fzos/blob/master/LICENSE
  */
 
 // package sun.security.util;

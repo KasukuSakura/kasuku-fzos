@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2018-2021 Karlatemp and contributors. All rights reserved.
+ *
+ * Use of this source code is governed by the MIT license that can be found via the following link.
+ *
+ * https://github.com/KasukuSakura/kasuku-fzos/blob/master/LICENSE
+ */
+
 import io.github.karlatemp.kasukufzos.image.reader.KFzClassLoader;
 import io.github.karlatemp.kasukufzos.image.reader.KFzReader;
 import io.github.karlatemp.kasukufzos.image.writer.KFzWriter;
