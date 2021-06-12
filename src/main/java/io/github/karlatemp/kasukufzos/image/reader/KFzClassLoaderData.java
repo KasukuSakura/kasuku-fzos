@@ -78,8 +78,8 @@ class KFzClassLoaderData {
             {
                 data.sealBase = new URL(rootURL, "/" + module.name + "/");
                 data.cs = new CodeSource(data.sealBase, (CodeSigner[]) null);
+                List<SignInf> signInfs = new ArrayList<>();
                 if (cl.options.signAction != KFzClassLoader.Options.SignAction.SKIP_SIGN) {
-                    List<SignInf> signInfs = new ArrayList<>();
                     for (KFzReaderImpl.Node entry : module.children.values()) {
                         if (entry.name.startsWith("META-INF/") && entry.name.endsWith(".SF")) {
                             String base = entry.name.substring(0, entry.name.length() - 2);
@@ -266,6 +266,24 @@ class KFzClassLoaderData {
                                     }
                                 }
                             }
+                        }
+                    }
+
+                }
+                {
+                    Collection<String> publiclyModule = cl.options.publiclyModules;
+                    Certificate publiclyCertificate = cl.options.publiclyCertificate;
+                    if (publiclyModule != null && publiclyModule.contains(module.name) && publiclyCertificate != null) {
+                        for (KFzReaderImpl.Node children : module.children.values()) {
+                            KClData kClData = children.data;
+                            if (kClData == null) {
+                                kClData = children.data = new KClData();
+                            }
+                            List<Certificate> certificates = kClData.certificates;
+                            if (certificates == null) {
+                                kClData.certificates = certificates = new ArrayList<>();
+                            }
+                            certificates.add(publiclyCertificate);
                         }
                     }
 

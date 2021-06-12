@@ -15,16 +15,64 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
 import java.security.SecureClassLoader;
+import java.security.cert.Certificate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
 
 public class KFzClassLoader extends SecureClassLoader {
     final KFzClassLoaderData image;
     final Options options;
+    ClassLoader portalLoader;
+
+    public ClassLoader portalLoader() {
+        if (portalLoader != null) return portalLoader;
+        synchronized (this) {
+            if (portalLoader != null) return portalLoader;
+            Collection<String> modules = options.publiclyModules;
+            if (modules == null || modules.isEmpty()) {
+                portalLoader = this;
+            } else {
+                portalLoader = new ClassLoader(null) {
+                    @Override
+                    public Class<?> loadClass(String name) throws ClassNotFoundException {
+                        Class<?> loadedClass = KFzClassLoader.this.loadClass(name);
+                        if (KFzClassLoader.this.findLoadedClass(name) != loadedClass) {
+                            return loadedClass;
+                        }
+                        ProtectionDomain protectionDomain = loadedClass.getProtectionDomain();
+                        CodeSource codeSource = protectionDomain.getCodeSource();
+                        if (protectionDomain.getClassLoader() != null &&
+                                protectionDomain.getClassLoader() != KFzClassLoader.this)
+                            return loadedClass;
+                        if (codeSource == null) return loadedClass;
+                        Certificate[] certificates = codeSource.getCertificates();
+                        if (certificates != null) {
+                            for (Certificate c : certificates) {
+                                if (c == options.publiclyCertificate) return loadedClass;
+                            }
+                        }
+                        throw new ClassNotFoundException(name);
+                    }
+                };
+            }
+        }
+        return portalLoader;
+    }
+
+    static {
+        if (KFzClassLoader.class.getClassLoader() == ClassLoader.getSystemClassLoader()) {
+            ClassLoader.registerAsParallelCapable();
+        }
+    }
 
     public static class Options {
         public SignAction signAction = SignAction.SKIP_SIGN;
+        public Collection<String> publiclyModules;
+        public Certificate publiclyCertificate = Assets.EXPORTED_CLASSES;
 
         public enum SignAction {
             SKIP_SIGN,
